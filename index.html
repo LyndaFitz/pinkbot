@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PinkBot 💗</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="app">
+  <h1>PinkBot 💗</h1>
+
+  <div class="chat">
+    <input id="msg" type="text" placeholder="Say hi to PinkBot..." />
+    <button id="send">Send</button>
+  </div>
+
+  <pre id="output"></pre>
+</div>
+
+<script>
+  const API_BASE = "http://localhost:8080/api";
+
+  document.getElementById("send").addEventListener("click", async () => {
+    const message = document.getElementById("msg").value;
+    const output = document.getElementById("output");
+
+    output.textContent = "Sending...";
+
+    try {
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+      output.textContent = data.reply;
+    } catch (err) {
+      output.textContent = "Error: " + err;
+    }
+  });
+</script>
